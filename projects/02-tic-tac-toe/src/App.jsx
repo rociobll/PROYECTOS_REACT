@@ -9,16 +9,17 @@ import { checkEndGamne, checkWinnerFrom } from "./logic/board"
 
 //los useState siempre en el cuerpo del componente, nunca dentro d eun if ni for ni nada, siempre al mismo nivel, no pueden estar anidados
 function App() {
-  // * Estado tablero -
+  // * Estado tablero y LOCAL STORAGE - para guardar el estado del tablero y el turno, así si recargamos la página no se pierde el estado del juego         
   //const [board, setBoard] = useState(Array(9).fill(null));
   const [board, setBoard] = useState(() => {//función para inicializar el estado del tablero, se ejecuta solo la primera vez que se renderiza 
-                                            //el componente, luego el estado se mantiene en memoria, no se vuelve a ejecutar la función
-  const boardFromStorage = window.localStorage.getItem("board") //si hay algo en el localStorage lo parseamos y lo usamos como estado inicial, sino usamos un tablero vacío
-  if(boardFromStorage) return JSON.parse(boardFromStorage)
-  return Array(9).fill(null)
+    console.log("Inicializar estado del board")                                          //el componente, luego el estado se mantiene en memoria, no se vuelve a ejecutar la función
+                                     
+    const boardFromStorage = window.localStorage.getItem("board") //si hay algo en el localStorage lo parseamos y lo usamos como estado inicial, sino usamos un tablero vacío
+    if(boardFromStorage) return JSON.parse(boardFromStorage)
+    return Array(9).fill(null)
   })
 
-  // * Estado para los turnos
+  // * Estado para los turnos y LOCAL STORAGE - guardamos estado del turno si hay guardado en local storage, sino el turno inicial es X
   //const [turn, setTurn] = useState(TURNS.X);
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem("turn") //si hay algo en el localStorage lo parseamos y lo usamos como estado inicial, sino usamos el turno X
@@ -53,9 +54,9 @@ const resetGame = () => {
     const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X;
     setTurn(newTurn);
 
-    //guardar partida en localStorage
+    //guardar partida en LOCAL STORAGE - guardamos el estado del tablero y el turno en local storage para que se mantenga al recargar la página
     window.localStorage.setItem("board", JSON.stringify(newBoard));
-    window.localStorage.setItem("turn", JSON.stringify(newTurn)); 
+    window.localStorage.setItem("turn",newTurn); 
 
     //revisar si hya ganador
     const newWinner = checkWinnerFrom(newBoard);
@@ -70,11 +71,22 @@ const resetGame = () => {
 
  useEffect(() => {
   // como minimo se ejcuta una vez, luego se ejecuta cada vez que el estado del tablero cambia, es decir, cada vez que se actualiza el tablero, se ejecuta esta función para revisar si hay un ganador o un empate
-  console.log('useEffect')
+  console.log('useEffect') 
  }, [winner]) // si el array de dependencias está vacío, se ejecuta solo una vez al montar el componente, si no está vacío, se ejecuta cada vez que alguna de las dependencias cambia, en este caso no tenemos dependencias, por eso se ejecuta solo una vez al montar el componente
+ // ahora se ejecuta la primera vez que se renderiza y cuando hay un ganador, empare o se reinicia el juego
+
+ //ejemplo efecto para guaradr partida cada vez que cambia tablero o turno
+ useEffect(() => {
+  //guardar partida
+  saveGameToStorage(board, turn)
+  function saveGameToStorage(board, turn) {
+    window.localStorage.setItem("board", JSON.stringify(board));
+    window.localStorage.setItem("turn", turn);  
+  }
+  }, [board, turn]) // se ejecuta cada vez que el estado del tablero o el turno cambia, es decir, cada vez que se actualiza el tablero o el turno, se guarda la partida en local storage
 
 
-  return (
+return (
     <main className="board">
       <h1>TIc tAc Toe</h1>
       <button onClick={resetGame}>Reset del juego</button>
