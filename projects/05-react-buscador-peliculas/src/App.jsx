@@ -38,14 +38,15 @@ return { search, updateSearch, error }
 }
 
 function App() {
-
-const { movies } = useMovies()
 const { search, updateSearch, error } = UseSearch()
+
+const { movies, getMovies } = useMovies({ search })
 //const inputRef = useRef() - cuando usas use ref valos q persiste entre render
 
 const handleSubmit = (event) => {
   event.preventDefault() // Evita que el formulario se envíe por defecto
-  console.log({search}) 
+  getMovies()
+  //console.log({search}) 
 
  // const {query} = Object.fromEntries (
    // new window.FormData(event.target)
@@ -86,7 +87,6 @@ const handleSubmit = (event) => {
        <Movies movies={movies}/>
       }
 
-      Aqí iran los resultados de las peliculas
     </main>
         
      
