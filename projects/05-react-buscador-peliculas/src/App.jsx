@@ -39,7 +39,7 @@ return { search, updateSearch, error }
 
 function App() {
 const { search, updateSearch, error } = UseSearch()
-const { movies, getMovies } = useMovies({ search })
+const { movies, loading, getMovies } = useMovies({ search })
 //const inputRef = useRef() - cuando usas use ref valos q persiste entre render
 
 const handleSubmit = (event) => {
@@ -83,7 +83,7 @@ const handleSubmit = (event) => {
     
     <main>
       {
-       <Movies movies={movies}/>
+        loading ? <p>Cargando...</p> : <Movies movies={movies}/>
       }
 
     </main>
