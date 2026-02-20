@@ -39,7 +39,6 @@ return { search, updateSearch, error }
 
 function App() {
 const { search, updateSearch, error } = UseSearch()
-
 const { movies, getMovies } = useMovies({ search })
 //const inputRef = useRef() - cuando usas use ref valos q persiste entre render
 

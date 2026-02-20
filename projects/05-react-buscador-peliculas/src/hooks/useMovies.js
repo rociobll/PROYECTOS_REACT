@@ -1,27 +1,18 @@
-import withResults from '../mocks/with-results.json'
-import withoutResults from '../mocks/no-results.json'
+//import withResults from '../mocks/with-results.json'
+import { searchMovies } from '../services/movies.js'
+//import withoutResults from '../mocks/no-results.json'
 import { useState } from 'react'
 
 
 export function useMovies ({ search }) {
-const [responseMovies, setResponseMovies] = useState([])
+//const [responseMovies, setResponseMovies] = useState([])
+const [movies, setMovies] = useState([])
 
-const movies = responseMovies.Search
-
-const mappedMovies = movies?.map(movie => ({
-  id: movie.imdbID,
-  title: movie.Title,
-  year: movie.Year,
-  poster: movie.Poster
-}))
 
 // si no es string vacio el seaarch, hace la busqueda, si no mostramos que no hay resultados
-const getMovies = () => {
-  if (search) {
-    setResponseMovies(withResults)
-  } else {
-    setResponseMovies(withoutResults)
-  }
+const getMovies = async () => {
+  const newMovies = await searchMovies({search})
+  setMovies(newMovies)
 }
-return { movies: mappedMovies, getMovies} 
+return { movies, getMovies} 
 }
