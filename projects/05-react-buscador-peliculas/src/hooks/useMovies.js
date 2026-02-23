@@ -1,14 +1,14 @@
 //import withResults from '../mocks/with-results.json'
-import { searchMovies } from "../services/movies.js"
 //import withoutResults from '../mocks/no-results.json'
-import { useState, useRef } from "react"
+import { searchMovies } from "../services/movies.js"
+import { useState, useRef, useMemo} from "react"
 
-export function useMovies({ search }) {
+export function useMovies({ search, sort }) {
   //const [responseMovies, setResponseMovies] = useState([])
   const [movies, setMovies] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
-  const previousSearch =useRef(search)  // para guardar la busqueda anterior sin renderizar
+  const previousSearch =useRef(search)  // para guardar la busqueda anterior sin renderizar (no recomendable usar varibales fuera del)
 
   // si no es string vacio el seaarch, hace la busqueda, si no mostramos que no hay resultados
   const getMovies = async () => {
@@ -25,5 +25,16 @@ export function useMovies({ search }) {
       setLoading(false)
     }
   }
-  return { movies, getMovies, loading, error };
+  // ordenar peliculas por título - lo malo es que se ejecuta el ordenado cada vez q se cambia un caracter mientras se eercribe
+  //para evitar usar useMemo
+  const sortedMovies = sort
+  ? [...movies].sort((a, b)=> a.title.localeCompare(b.title))
+  : movies
+
+  console.log('render')  //vuelve a renderizar-reordenar cada vez que cambia el input mientras escribimos
+
+
+
+  return { movies: sortedMovies, getMovies, loading, error, sort }
+
 }

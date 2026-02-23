@@ -38,21 +38,19 @@ return { search, updateSearch, error }
 }
 
 function App() {
+const [sort, setSort] =  useState(false)
 const { search, updateSearch, error } = UseSearch()
-const { movies, loading, getMovies } = useMovies({ search })
+const { movies, loading, getMovies } = useMovies({ search, sort })  // pasamos el sort a useMOvies
 //const inputRef = useRef() - cuando usas use ref valos q persiste entre render
 
 const handleSubmit = (event) => {
   event.preventDefault() // Evita que el formulario se envíe por defecto
   getMovies()
-  //console.log({search}) 
+ }
 
- // const {query} = Object.fromEntries (
-   // new window.FormData(event.target)
-   
- // const value = inputRef.current.value  // crea un objeto que desde el current loq ue cambia es lo que viene despues, el value 
-  //console.log(value)
-}
+ const handleSort = () => {
+  setSort(!sort)
+ }
 
 // controlar - estamos tirando de estado y el estado es asincrono
  const handleChange = (event) => {
@@ -76,6 +74,8 @@ const handleSubmit = (event) => {
           name='query' 
           // ref={inputRef} 
           placeholder='Avengers, Star War, Yhe MAtrix...' />
+
+          <input type='checkbox' onChange={handleSort} checked={sort} />
           <button type='submit'>Search</button>
           </form>
           {error && <p style={{ color: 'red'}}>{error}</p>}
