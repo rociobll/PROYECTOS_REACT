@@ -50,7 +50,7 @@ const debouncedGetMovies = useCallback(
   console.log('search', search)
   getMovies({ search})
 }, 500)
-, [getMovies]
+, [getMovies] 
   )
 //const inputRef = useRef() - cuando usas use ref valos q persiste entre render
 
