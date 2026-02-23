@@ -1,7 +1,8 @@
 import './App.css'
-import { useEffect, useRef, useState } from 'react' // te permite crear un referencia mutable que persiste durante todo el ciclo de vida del componente. Su valor no se reinicia cada vez que el componente se renderiza, a diferencia de las variables normales que se reinician cada vez que el componente se renderiza. Esto es útil para almacenar valores que no necesitan causar una nueva renderización cuando cambian, como referencias a elementos del DOM o valores que quieres mantener entre renders sin causar un nuevo renderizado.
+import { useEffect, useRef, useState, useCallback } from 'react' // te permite crear un referencia mutable que persiste durante todo el ciclo de vida del componente. Su valor no se reinicia cada vez que el componente se renderiza, a diferencia de las variables normales que se reinician cada vez que el componente se renderiza. Esto es útil para almacenar valores que no necesitan causar una nueva renderización cuando cambian, como referencias a elementos del DOM o valores que quieres mantener entre renders sin causar un nuevo renderizado.
 import { useMovies } from './hooks/useMovies'
 import { Movies } from './components/Movies'
+import debounce from 'just-debounce-it'
 
 // custom hook
 function UseSearch () {
@@ -41,6 +42,16 @@ function App() {
 const [sort, setSort] =  useState(false)
 const { search, updateSearch, error } = UseSearch()
 const { movies, loading, getMovies } = useMovies({ search, sort })  // pasamos el sort a useMOvies
+
+// eslint-disable-next-line react-hooks/exhaustive-deps
+const debouncedGetMovies = useCallback(
+  // eslint-disable-next-line react-hooks/use-memo
+  debounce(search => {
+  console.log('search', search)
+  getMovies({ search})
+}, 500)
+, [getMovies]
+  )
 //const inputRef = useRef() - cuando usas use ref valos q persiste entre render
 
 const handleSubmit = (event) => {
@@ -56,12 +67,10 @@ const handleSubmit = (event) => {
  const handleChange = (event) => {
   const newSearch = event.target.value
   updateSearch(newSearch)  // cada vez que detectamos un cambio en en onChange ,se actualiza el estado y eso lo veremos en el input
-  getMovies({search: newSearch })  // ahora cada vez que dertecta un cambio en el input tambien hace la busqueda
+  //getMovies({search: newSearch })  // ahora cada vez que dertecta un cambio en el input tambien hace la busqueda - pero se hacwe llamada a api cada vez que se introduce un caracter nuevo... y race condition y tener busquedas erróneas
+  debouncedGetMovies( newSearch )
 }  
 
-useEffect(() => {
-  console.log('newMovies received')
-},[getMovies])
 
 
   return (
