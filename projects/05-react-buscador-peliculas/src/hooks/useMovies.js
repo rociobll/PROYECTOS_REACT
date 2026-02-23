@@ -1,7 +1,7 @@
 //import withResults from '../mocks/with-results.json'
 //import withoutResults from '../mocks/no-results.json'
 import { searchMovies } from "../services/movies.js"
-import { useState, useRef, useMemo} from "react"
+import { useState, useRef, useMemo, useCallback} from "react"
 
 export function useMovies({ search, sort }) {
   //const [responseMovies, setResponseMovies] = useState([])
@@ -14,8 +14,7 @@ export function useMovies({ search, sort }) {
   // utilizar useMemo, para que se ejecute esta funcxion solo si cambia el search
   // ahora en lugar de depender del search de la funcion use<movies, vamos a depender 
   // del search que inyectemos en parametro en el return de getMovies
-  const getMovies =  useMemo (() => {
-    return async ({search}) => {
+  const getMovies =  useCallback(async ({search}) => {
       if (search === previousSearch.current) return  // si es la misma busqueda no hacemos nada
 
       try {
@@ -29,8 +28,8 @@ export function useMovies({ search, sort }) {
       } finally {
         setLoading(false)
       }
-    }
-  }, []) // que solo se contruya esta funciñon una vez, con search, se genera cada vez que s esta escribiendo
+    
+  }, []) // que solo se contruya esta función una vez, con search, se genera cada vez que s esta escribiendo
 
   // ordenar peliculas por título - lo malo es que se ejecuta el ordenado cada vez q se cambia un caracter mientras se eercribe
   //para evitar usar useMemo - memorizar computaciones que no queremosque se recalculaen a no se que cambien las dependencias que le indiquemos. 

@@ -45,7 +45,7 @@ const { movies, loading, getMovies } = useMovies({ search, sort })  // pasamos e
 
 const handleSubmit = (event) => {
   event.preventDefault() // Evita que el formulario se envíe por defecto
-  getMovies({search})
+  getMovies({ search })
  }
 
  const handleSort = () => {
@@ -58,7 +58,7 @@ const handleSubmit = (event) => {
 }  
 
 useEffect(() => {
-  console.log('newetMovies received')
+  console.log('newMovies received')
 },[getMovies])
 
 
