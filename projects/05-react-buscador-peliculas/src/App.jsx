@@ -45,7 +45,7 @@ const { movies, loading, getMovies } = useMovies({ search, sort })  // pasamos e
 
 const handleSubmit = (event) => {
   event.preventDefault() // Evita que el formulario se envíe por defecto
-  getMovies()
+  getMovies({search})
  }
 
  const handleSort = () => {

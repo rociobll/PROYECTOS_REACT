@@ -11,22 +11,27 @@ export function useMovies({ search, sort }) {
   const previousSearch =useRef(search)  // para guardar la busqueda anterior sin renderizar (no recomendable usar varibales fuera del)
 
   // si no es string vacio el seaarch, hace la busqueda, si no mostramos que no hay resultados
+  // utilizar useMemo, para que se ejecute esta funcxion solo si cambia el search
+  // ahora en lugar de depender del search de la funcion use<movies, vamos a depender 
+  // del search que inyectemos en parametro en el return de getMovies
   const getMovies =  useMemo (() => {
-    return async () => {
-    if (search === previousSearch.current) return  // si es la misma busqueda no hacemos nada
-    try {
-      setLoading(true)
-      setError(null)
-      previousSearch.current = search 
-      const newMovies = await searchMovies({ search })
-      setMovies(newMovies)
-    } catch (e) {
-      setError(e.message)
-    } finally {
-      setLoading(false)
+    return async ({search}) => {
+      if (search === previousSearch.current) return  // si es la misma busqueda no hacemos nada
+
+      try {
+        setLoading(true)
+        setError(null)
+        previousSearch.current = search 
+        const newMovies = await searchMovies({ search })
+        setMovies(newMovies)
+      } catch (e) {
+        setError(e.message)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
-}, [search])
+  }, []) // que solo se contruya esta funciñon una vez, con search, se genera cada vez que s esta escribiendo
+
   // ordenar peliculas por título - lo malo es que se ejecuta el ordenado cada vez q se cambia un caracter mientras se eercribe
   //para evitar usar useMemo - memorizar computaciones que no queremosque se recalculaen a no se que cambien las dependencias que le indiquemos. 
   // no es necesario usarlo en todos lo compoenntes, solo si tienes un problema de rendimiento
