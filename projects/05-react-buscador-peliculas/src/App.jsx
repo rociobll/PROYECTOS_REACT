@@ -54,7 +54,9 @@ const handleSubmit = (event) => {
 
 // controlar - estamos tirando de estado y el estado es asincrono
  const handleChange = (event) => {
-  updateSearch(event.target.value)  // cada vez que detectamos un cambio en en onChange ,se actualiza el estado y eso lo veremos en el input
+  const newSearch = event.target.value
+  updateSearch(newSearch)  // cada vez que detectamos un cambio en en onChange ,se actualiza el estado y eso lo veremos en el input
+  getMovies({search: newSearch })  // ahora cada vez que dertecta un cambio en el input tambien hace la busqueda
 }  
 
 useEffect(() => {
