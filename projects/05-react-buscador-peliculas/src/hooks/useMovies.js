@@ -26,14 +26,21 @@ export function useMovies({ search, sort }) {
     }
   }
   // ordenar peliculas por título - lo malo es que se ejecuta el ordenado cada vez q se cambia un caracter mientras se eercribe
-  //para evitar usar useMemo
-  const sortedMovies = sort
+  //para evitar usar useMemo - memorizar computaciones que no queremosque se recalculaen a no se que cambien las dependencias que le indiquemos. 
+  // no es necesario usarlo en todos lo compoenntes, solo si tienes un problema de rendimiento
+/*   const sortedMovies = sort
   ? [...movies].sort((a, b)=> a.title.localeCompare(b.title))
   : movies
 
   console.log('render')  //vuelve a renderizar-reordenar cada vez que cambia el input mientras escribimos
+ */
 
-
+  const sortedMovies = useMemo(()=> {
+    console.log('memoSorted')
+    return sort
+    ? [...movies].sort((a, b) => a.title.localeCompare(b.title))
+    : movies
+  }, [sort, movies])  // cuando cambie el sort o las peliculas, se ejecutara el ordenemiento, si no no
 
   return { movies: sortedMovies, getMovies, loading, error, sort }
 
