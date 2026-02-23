@@ -57,6 +57,9 @@ const handleSubmit = (event) => {
   updateSearch(event.target.value)  // cada vez que detectamos un cambio en en onChange ,se actualiza el estado y eso lo veremos en el input
 }  
 
+useEffect(() => {
+  console.log('newetMovies received')
+},[getMovies])
 
 
   return (

@@ -11,7 +11,8 @@ export function useMovies({ search, sort }) {
   const previousSearch =useRef(search)  // para guardar la busqueda anterior sin renderizar (no recomendable usar varibales fuera del)
 
   // si no es string vacio el seaarch, hace la busqueda, si no mostramos que no hay resultados
-  const getMovies = async () => {
+  const getMovies =  useMemo (() => {
+    return async () => {
     if (search === previousSearch.current) return  // si es la misma busqueda no hacemos nada
     try {
       setLoading(true)
@@ -25,6 +26,7 @@ export function useMovies({ search, sort }) {
       setLoading(false)
     }
   }
+}, [search])
   // ordenar peliculas por título - lo malo es que se ejecuta el ordenado cada vez q se cambia un caracter mientras se eercribe
   //para evitar usar useMemo - memorizar computaciones que no queremosque se recalculaen a no se que cambien las dependencias que le indiquemos. 
   // no es necesario usarlo en todos lo compoenntes, solo si tienes un problema de rendimiento
@@ -36,7 +38,6 @@ export function useMovies({ search, sort }) {
  */
 
   const sortedMovies = useMemo(()=> {
-    console.log('memoSorted')
     return sort
     ? [...movies].sort((a, b) => a.title.localeCompare(b.title))
     : movies
