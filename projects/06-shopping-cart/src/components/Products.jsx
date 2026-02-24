@@ -1,24 +1,47 @@
+import { useCart } from "../hooks/useCart.jsx";
 import "./Products.css";
-import { AddToCartIcon } from "./icons.jsx";
+import { AddToCartIcon, RemoveFromCartIcon } from "./icons.jsx";
+
 
 export function Products({ products }) {
-  return (
+  const { addToCart, cart, removeFromCart } = useCart()
+
+  // ver si el producto esta en el carrito
+  const checkProductInCart = product => {
+    return cart.some(item => item.id === product.id)
+  }
+
+
+    return (
     <main className="products">
       <ul>
-        {products.slice(0, 14).map((product) => (
+        {products.slice(0, 27).map(product => {
+          const isProductInCart = checkProductInCart(product)
+          return (
           <li key={product.id}>
             <img src={product.thumbnail} alt={product.title} />
             <div>
               <strong>{product.title}</strong> - ${product.price}
             </div>
+
             <div>
-              <button>
-                <AddToCartIcon />
+              <button onClick={() => {
+                isProductInCart 
+                ? removeFromCart(product) 
+                : addToCart(product)
+              }}
+              >
+                {
+                  isProductInCart
+                  ? <RemoveFromCartIcon />
+                  : <AddToCartIcon />
+                }
               </button>
             </div>
           </li>
-        ))}
+          )
+        })}
       </ul>
     </main>
-  );
+  )
 }
