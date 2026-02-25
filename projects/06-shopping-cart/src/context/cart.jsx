@@ -1,53 +1,12 @@
 import { createContext, useReducer } from "react";
+import { cartReducer, cartInitialState } from "../reducers/cart";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext();
 
-//esta es la lógica de actualizacion de tu estado lo puedes utilizar fuera de react
-const initialState = [];
-// REDUCER -  TRANSFORMA ESTADO A TRAVES DE UNA ACCIÓN - segun l accion hara una cosa u otra
-const reducer = (state, action) => {
-  const { type: actionType, payload: actionPayload } = action;
-
-  switch (actionType) {
-    case "ADD_TO_CART": {
-      const { id } = actionPayload;
-      const productInCartIndex = state.findIndex((item) => item.id === id);
-
-      if (productInCartIndex >= 0) {
-        const newState = structuredClone(state);
-        newState[productInCartIndex].quantity += 1;
-        return newState;
-      }
-      //si no esta en el carrito
-      return [
-        ...state,
-        {
-          ...actionPayload, // product
-          quantity: 1,
-        }
-      ]
-    }
-    case "REMOVE_FROM_CART": {
-      const { id } = actionPayload;
-      return state.filter((item) => item.id !== id); // filtraamos los items que sean diferente y devolvemos el nuevo estado
-    }
-
-    case "CLEAR_CART": {
-      return initialState;
-    }
-  }
-  return state;
-}
-
-//testeando que el reducer funciona para añadir un producto al carrito - se puede hacer pq esta fuera y no hay que ejecutar
-// expect(
-//     reducer([], {type: 'ADD_TO_CART', payload: {id:1}} )
-//     ).toEqual([{ id:1, quantity: 1 }]) 
-
 
 export function CartProvider({ children }) {
-   const [state, dispatch] = useReducer(reducer, initialState)  // el reducer es la funcion q recibe es estado y la funcio para determinar el nuevoe stado, y el estado inicial
+   const [state, dispatch] = useReducer(cartReducer, cartInitialState)  // el reducer es la funcion q recibe es estado y la funcio para determinar el nuevoe stado, y el estado inicial
     // primero el estado, y luego dispatch que se encarga de enviar las cciones al reducer
 
     const addToCart = product => dispatch({

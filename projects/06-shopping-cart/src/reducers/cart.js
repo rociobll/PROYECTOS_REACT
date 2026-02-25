@@ -1,4 +1,8 @@
 // REDUCER -  TRANSFORMA ESTADO A TRAVES DE UNA ACCIÓN - segun l accion hara una cosa u otra
+//esta es la lógica de actualizacion de tu estado lo puedes utilizar fuera de react
+export const cartInitialState = []
+
+
 export const cartReducer = (state, action) => {
   const { type: actionType, payload: actionPayload } = action;
 
@@ -27,8 +31,13 @@ export const cartReducer = (state, action) => {
     }
 
     case "CLEAR_CART": {
-      return initialState;
+      return cartInitialState
     }
   }
-  return state;
+  return state
 }
+
+//testeando que el reducer funciona para añadir un producto al carrito - se puede hacer pq esta fuera y no hay que ejecutar
+// expect(
+//     reducer([], {type: 'ADD_TO_CART', payload: {id:1}} )
+//     ).toEqual([{ id:1, quantity: 1 }]) 

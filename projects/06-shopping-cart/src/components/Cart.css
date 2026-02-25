@@ -44,6 +44,7 @@
   transition: all .3s ease;
   width: 32px;
   z-index: 9999;
+  stroke: white;
 }
 
 .cart-button:hover {
@@ -53,4 +54,8 @@
 .cart-button ~ input:checked ~ .cart {
   height: 100%;
   display: block;
+}
+
+button.plus {
+  color: white;
 }
