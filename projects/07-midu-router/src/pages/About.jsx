@@ -2,6 +2,7 @@
 import { Link } from '../Link'
 
 
+console.log('HOLA - estamos importando el archivo about.jsx sin necesitarlo al cargar home')
 export default function AboutPage () {
   return (
     <>
