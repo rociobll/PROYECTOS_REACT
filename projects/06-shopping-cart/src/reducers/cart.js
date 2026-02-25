@@ -2,12 +2,17 @@
 //esta es la lógica de actualizacion de tu estado lo puedes utilizar fuera de react
 export const cartInitialState = []
 
+export const CART_ACTION_TYPES = {
+    ADD_TO_CART: 'ADD_TO_CART',
+    REMOVE_FROM_CART: 'REMOVE_FROM_CART',
+    CLEAR_CART: 'CLEAR_ CART'
+}
 
 export const cartReducer = (state, action) => {
   const { type: actionType, payload: actionPayload } = action;
 
   switch (actionType) {
-    case "ADD_TO_CART": {
+    case CART_ACTION_TYPES.ADD_TO_CART: {
       const { id } = actionPayload;
       const productInCartIndex = state.findIndex((item) => item.id === id);
 
@@ -25,12 +30,12 @@ export const cartReducer = (state, action) => {
         }
       ]
     }
-    case "REMOVE_FROM_CART": {
+    case CART_ACTION_TYPES.REMOVE_FROM_CART: {
       const { id } = actionPayload;
       return state.filter((item) => item.id !== id); // filtraamos los items que sean diferente y devolvemos el nuevo estado
     }
 
-    case "CLEAR_CART": {
+    case CART_ACTION_TYPES.CLEAR_CART: {
       return cartInitialState
     }
   }

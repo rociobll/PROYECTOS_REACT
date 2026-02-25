@@ -5,11 +5,11 @@ import { cartReducer, cartInitialState } from "../reducers/cart";
 export const CartContext = createContext();
 
 
-export function CartProvider({ children }) {
-   const [state, dispatch] = useReducer(cartReducer, cartInitialState)  // el reducer es la funcion q recibe es estado y la funcio para determinar el nuevoe stado, y el estado inicial
-    // primero el estado, y luego dispatch que se encarga de enviar las cciones al reducer
+// con el dispatch podemos sacar las funciones aadd, remove, clear, fuera y sepoarar mejor lo que necesitan los componenetes
+function useCartReducer () {
+    const [ state, dispatch] = useReducer(cartReducer, cartInitialState)
 
-    const addToCart = product => dispatch({
+     const addToCart = product => dispatch({
         type: 'ADD_TO_CART',
         payload: product
     })
@@ -21,6 +21,15 @@ export function CartProvider({ children }) {
 
     const clearCart = () => dispatch( {type: 'CLEAR_CART'})
 
+    return { state, addToCart, removeFromCart, clearCart}
+
+}
+
+// la dependencia de usar React context es mínima
+export function CartProvider({ children }) {
+   const { state, addToCart, removeFromCart, clearCart} = useCartReducer()  // el reducer es la funcion q recibe es estado y la funcio para determinar el nuevoe stado, y el estado inicial
+    // primero el estado, y luego dispatch que se encarga de enviar las cciones al reducer
+   
   return (
     <CartContext.Provider
       value={{
