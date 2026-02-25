@@ -1,33 +1,31 @@
-
-import { useState, useEffect } from 'react'
 import './App.css'
-import { EVENTS } from './consts'
+import { Router } from './Router'
 import HomePage from './pages/Home'
 import AboutPage from './pages/About'
+import Page404 from './pages/404'
 
+const appRoutes = [
+ {
+          path: '/',
+          Component: HomePage
+        },
+        {
+          path:'/about',
+          Component: AboutPage
+        },
+      
+]
 
 function App() {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname)
-
-  useEffect  (() => {
-    const onLocationChange = () => {
-      setCurrentPath(window.location.pathname)
-    }
-    window.addEventListener(EVENTS.PUSHSTATE, onLocationChange)
-    window.addEventListener(EVENTS.POPSTATE, onLocationChange)  // para que navegue haci atras - popstate
-
-    return () => {
-      window.removeEventListener(EVENTS.PUSHSTATE, onLocationChange)
-      window.removeEventListener(EVENTS.POPSTATE, onLocationChange)
-    }
-  }, [])
-
-
+  
   return (
     
     <main>
-      {currentPath === '/' && <HomePage />}
-      {currentPath === '/about' && <AboutPage />}
+      <Router routes = {appRoutes} defaultComponent={Page404}
+      />
+
+     {/*  {currentPath === '/' && <HomePage />}
+      {currentPath === '/about' && <AboutPage />} */}
     </main>
     
   )
