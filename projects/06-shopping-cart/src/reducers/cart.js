@@ -1,11 +1,17 @@
 // REDUCER -  TRANSFORMA ESTADO A TRAVES DE UNA ACCIÓN - segun l accion hara una cosa u otra
 //esta es la lógica de actualizacion de tu estado lo puedes utilizar fuera de react
-export const cartInitialState = []
+
+export const cartInitialState =  JSON.parse(window.localStorage.getItem('cart')) || []   // añadimos persistencia - local storage // cogemos lo que hay en el carrito y lo guardamos
 
 export const CART_ACTION_TYPES = {
     ADD_TO_CART: 'ADD_TO_CART',
     REMOVE_FROM_CART: 'REMOVE_FROM_CART',
     CLEAR_CART: 'CLEAR_ CART'
+}
+
+//update LOCAL STORAGE with state for cart
+export const updateLocalStorage = state => {
+    window.localStorage.setItem('cart', JSON.stringify(state))
 }
 
 export const cartReducer = (state, action) => {
@@ -22,23 +28,31 @@ export const cartReducer = (state, action) => {
         return newState;
       }
       //si no esta en el carrito
-      return [
+      // antes de hacer cualquier return, actualizar con nuevo estado
+      const newState = [
         ...state,
         {
           ...actionPayload, // product
           quantity: 1,
         }
       ]
+       updateLocalStorage(newState) 
+       return newState
     }
+
     case CART_ACTION_TYPES.REMOVE_FROM_CART: {
       const { id } = actionPayload;
-      return state.filter((item) => item.id !== id); // filtraamos los items que sean diferente y devolvemos el nuevo estado
+      const newState= state.filter((item) => item.id !== id); // filtraamos los items que sean diferente y devolvemos el nuevo estado
+      updateLocalStorage(newState)
+      return newState
     }
 
     case CART_ACTION_TYPES.CLEAR_CART: {
+      updateLocalStorage(cartInitialState)
       return cartInitialState
     }
   }
+
   return state
 }
 
