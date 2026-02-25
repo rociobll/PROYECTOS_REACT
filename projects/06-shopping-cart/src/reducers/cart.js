@@ -6,7 +6,7 @@ export const cartInitialState =  JSON.parse(window.localStorage.getItem('cart'))
 export const CART_ACTION_TYPES = {
     ADD_TO_CART: 'ADD_TO_CART',
     REMOVE_FROM_CART: 'REMOVE_FROM_CART',
-    CLEAR_CART: 'CLEAR_ CART'
+    CLEAR_CART: 'CLEAR_CART'
 }
 
 //update LOCAL STORAGE with state for cart
@@ -25,7 +25,28 @@ export const cartReducer = (state, action) => {
       if (productInCartIndex >= 0) {
         const newState = structuredClone(state);
         newState[productInCartIndex].quantity += 1;
+        updateLocalStorage(newState)
         return newState;
+
+        
+      // 👶 usando el map
+      // const newState = state.map(item => {
+      //   if (item.id === id) {
+      //     return {
+      //       ...item,
+      //       quantity: item.quantity + 1
+      //     }
+      //   }
+
+      //   return item
+      // })
+
+      // ⚡ usando el spread operator y slice - este puede que se el más rápido
+    /*   const newState = [
+        ...state.slice(0, productInCartIndex),
+        { ...state[productInCartIndex], quantity: state[productInCartIndex].quantity + 1 },
+        ...state.slice(productInCartIndex + 1)
+      ] */
       }
       //si no esta en el carrito
       // antes de hacer cualquier return, actualizar con nuevo estado
@@ -48,8 +69,8 @@ export const cartReducer = (state, action) => {
     }
 
     case CART_ACTION_TYPES.CLEAR_CART: {
-      updateLocalStorage(cartInitialState)
-      return cartInitialState
+      updateLocalStorage([])
+      return []
     }
   }
 
