@@ -1,16 +1,17 @@
 import { useState, useEffect, Children } from "react"
 import { EVENTS } from "./consts"
 import { match } from 'path-to-regexp'
+import { getCurrentPath } from "./utils"
 
 
 // eslint-disable-next-line no-unused-vars
 export function Router ( { children, routes= [], defaultComponent: DefaultComponent = () => <h1>404</h1>} ) { 
   // acceder al chilgren y a sus props
-const [currentPath, setCurrentPath] = useState(window.location.pathname)
+const [currentPath, setCurrentPath] = useState(getCurrentPath())
 
   useEffect  (() => {
     const onLocationChange = () => {
-      setCurrentPath(window.location.pathname)
+      setCurrentPath(getCurrentPath())
     }
     window.addEventListener(EVENTS.PUSHSTATE, onLocationChange)
     window.addEventListener(EVENTS.POPSTATE, onLocationChange)  // para que navegue haci atras - popstate
@@ -34,7 +35,7 @@ const routesFromChildren = Children.map(children, ({props, type}) => {
 })
     // console.log(routesFromChildren)
     //concatenar las rutas que nos estan pasando por props con las rutas que nos estan pasando por children
-    const routesToUse = routes.concat(routesFromChildren)
+    const routesToUse = routes.concat(routesFromChildren).filter(Boolean)
 
   const Page = routesToUse.find(({ path }) => {
     if (path === currentPath) return true    //si la ruta e sla misma devuelve true
