@@ -1,4 +1,4 @@
-import { EVENTS } from "./consts"
+import { EVENTS } from "../consts"
 
 
 // funcion q cambia url de batta, crea evente y lo va a despachar

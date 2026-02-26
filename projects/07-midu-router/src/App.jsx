@@ -5,8 +5,8 @@ import Page404 from "./pages/404"
 import SearchPage from "./pages/Search"
 // importar de forma dinamica los components, hasta que no los necesitamos no los renderiza
 import { lazy, Suspense } from "react"
-import { Router } from "./Router"
-import { Route } from "./Route"
+import { Router } from "./components/Router.jsx"
+import { Route } from "./components/Route.jsx"
 
 // import dinámico - solo se importa cuando lo necesitamos - solo enc aso de que se ejecute esa función
 // te crea el componente vacío, este componente hasta que no se vaya a renderizar no va aejecutar ese import

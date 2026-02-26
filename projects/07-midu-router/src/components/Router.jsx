@@ -1,7 +1,7 @@
 import { useState, useEffect, Children } from "react"
-import { EVENTS } from "./consts"
+import { EVENTS } from "../consts"
 import { match } from 'path-to-regexp'
-import { getCurrentPath } from "./utils"
+import { getCurrentPath } from "../utils"
 
 
 // eslint-disable-next-line no-unused-vars

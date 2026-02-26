@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
-import { Router } from "./Router";
+import { Router } from "./components/Router";
 import { getCurrentPath } from "./utils";
-import { Route } from "./Route";
-import { Link } from "./Link";
+import { Route } from "./components/Route";
+import { Link } from "./components/Link";
 
 // para mockear
 vi.mock("./utils.js", () => ({  // cada vez que se importe algo de utils no uses archivo real usa el objetoq ue te doy
@@ -43,7 +43,7 @@ describe("Router", () => {
   })
 
   it('should navigate using Links', async () => {
-    getCurrentPath.mockReturnValueOnce('/')
+    getCurrentPath.mockReturnValue('/')
 
     render (
         <Router>
@@ -60,6 +60,11 @@ describe("Router", () => {
             
         </Router>
     )
+
+  // 2. CAMBIO CRUCIAL: Preparamos el mock para que devuelva la NUEVA ruta
+  // ANTES de hacer el clic
+  getCurrentPath.mockReturnValue('/about')  // hago esto si no me da error el test
+
     //Click on the link
     const anchor = screen.getByText(/Go To About/)
     fireEvent.click(anchor)
