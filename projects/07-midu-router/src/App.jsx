@@ -4,7 +4,7 @@ import HomePage from "./pages/Home"
 import Page404 from "./pages/404"
 import SearchPage from "./pages/Search"
 // importar de forma dinamica los components, hasta que no los necesitamos no los renderiza
-import { lazy } from "react"
+import { lazy, Suspense } from "react"
 import { Router } from "./Router"
 import { Route } from "./Route"
 
@@ -12,7 +12,6 @@ import { Route } from "./Route"
 // te crea el componente vacío, este componente hasta que no se vaya a renderizar no va aejecutar ese import
 // y cuando lo necesite ejecutaré esta función para importar el componente
 const LazyAboutPage = lazy(() => import ('./pages/About.jsx'))  // import dinámico
-
 
 
 
@@ -25,6 +24,12 @@ const appRoutes = [
   //   path: "/about",
   //   Component: AboutPage,
   // },
+
+  //INTERNACIONALIZACIÓN
+  {
+    path: '/:lang/about',
+    Component: LazyAboutPage
+  },
   {    // Rutas con PARAMETROS
     path: "/search/:query",
     Component: SearchPage,
